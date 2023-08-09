@@ -26,4 +26,4 @@ app.register_blueprint(sla_bp)
 app.register_blueprint(qlt_bp)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8088)
+    app.run(host='0.0.0.0', port=8088)
