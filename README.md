@@ -17,7 +17,8 @@ docker build -t qualitor-api .
 
 3. execute
 ```bash 
-docker run -it -p 5000:5000 -e QUALITOR_DB_HOST=<ip_db_qualitor> \
+docker run -it -d -p 8088:8088 --name qualitor.api \
+-e QUALITOR_DB_HOST=<ip_db_qualitor> \
 -e QUALITOR_DB_USR=<usr_db_qualitor> \
 -e QUALITOR_DB_PWD=<pass_db_qualitor> \
 -e QUALITOR_DB_BASE=<db_name> \
