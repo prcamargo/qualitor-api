@@ -1,5 +1,5 @@
 var addTicketByData = {
-    url: 'http://localhost:5000/ws/WSTicket/addTicketByData',
+    url: 'http://localhost:8088/ws/WSTicket/addTicketByData',
     cdcliente: null,
     cdcontato: null,
     idchamado: null,
@@ -16,18 +16,18 @@ var addTicketByData = {
 
     sendMessage: function () {
         var params = {
-            cdcliente: null,
-            cdcontato: null,
-            idchamado: null,
-            cdcategoria: null,
-            cdic: null,
-            nmtitulochamado: null,
-            cdtipochamado: null,
-            cdlocalidade: null,
-            cdseveridade: null,
-            dschamado: null,
-            dspalavrachave: null,
-            cdorigem: null,
+            cdcliente: addTicketByData.cdcliente,
+            cdcontato: addTicketByData.cdcontato,
+            idchamado: addTicketByData.idchamado,
+            cdcategoria: addTicketByData.cdcategoria,
+            cdic: addTicketByData.cdic,
+            nmtitulochamado: addTicketByData.nmtitulochamado,
+            cdtipochamado: addTicketByData.cdtipochamado,
+            cdlocalidade: addTicketByData.cdlocalidade,
+            cdseveridade: addTicketByData.cdseveridade,
+            dschamado: addTicketByData.dschamado,
+            dspalavrachave: addTicketByData.dspalavrachave,
+            cdorigem: addTicketByData.cdorigem,
         },
         response,
         request = new HttpRequest(),
@@ -42,12 +42,13 @@ var addTicketByData = {
         Zabbix.log(4, '[Qualitor Webhook] HTTP code: ' + request.getStatus());
 
         try {
+            Zabbix.log(4,response);
             response = JSON.parse(response);
+            
         }
         catch (error) {
             response = null;
         }
-
     }
 };
 
@@ -60,8 +61,9 @@ var closeTicket = {
 var Ic = {
     nmic: null,
     cdempresa: null,
-    url: 'http://localhost:5000/ws/WSIc/',
+    url: 'http://localhost:8088/ws/WSIc/',
     cdic: null,
+    cdcliente: null,
 
     getIc: function () {
         var params = {
@@ -76,13 +78,13 @@ var Ic = {
 
         Zabbix.log(4, '[Qualitor Webhook] IC - URL: ' + url + 'getIc');
         Zabbix.log(4, '[Qualitor Webhook] IC - params: ' + data);
-        Zabbix.log(4, '[Qualitor Webhook] IC - find IC: ' + nmic);
+        Zabbix.log(4, '[Qualitor Webhook] IC - find cdic: ' + Ic.nmic);
         response = request.post(url + 'getIc',data);
         Zabbix.log(4, '[Qualitor Webhook] HTTP code: ' + request.getStatus());
 
         try {
             response = JSON.parse(response);
-            const cdic = response.wsqualitor.response_data.dataitem.cdic;
+            Ic.cdic = response.wsqualitor.response_data.dataitem.cdic;
         }
         catch (error) {
             response = null;
@@ -102,15 +104,21 @@ var Ic = {
 
         Zabbix.log(4, '[Qualitor Webhook] IC - URL: ' + url + 'getIcData');
         Zabbix.log(4, '[Qualitor Webhook] IC - params: ' + data);
-        Zabbix.log(4, '[Qualitor Webhook] IC - find IC: ' + nmic);
+        Zabbix.log(4, '[Qualitor Webhook] IC - find ic data: ' + Ic.nmic);
         response = request.post(url + 'getIcData',data);
         Zabbix.log(4, '[Qualitor Webhook] HTTP code: ' + request.getStatus());
 
         try {
+            Zabbix.log(4, response);
+            
             response = JSON.parse(response);
-            const cdcliente = response.wsqualitor.response_data.dataitem.cdempresa;
-            const cdcontato = response.wsqualitor.response_data.dataitem.cdcontato;
-            const cdic = response.wsqualitor.response_data.dataitem.cdic;
+            cdcliente = response.wsqualitor.response_data.dataitem.cdcliente;  
+            cdcontato = response.wsqualitor.response_data.dataitem.cdcontato;
+            cdic = response.wsqualitor.response_data.dataitem.cdic;
+
+            Zabbix.log(4, 'cdic: ' + cdic);
+            Zabbix.log(4, 'cdcliente: ' +cdcliente);
+            Zabbix.log(4, 'cdcontato: ' + cdcontato);
         }
         catch (error) {
             response = null;
@@ -118,8 +126,9 @@ var Ic = {
     }
 };
 
+
+//procurar IC
 try {
-    //procurar IC
     var params = JSON.parse(value);
     
     Ic.nmic = params.host_name;
@@ -133,8 +142,8 @@ catch (error) {
     throw 'failed find IC: ' + error + '.';
 }
 
+//abrindo chamado
 try {
-    //abrindo chamado
     var params = JSON.parse(value);
 
     addTicketByData.cdcliente = cdcliente;

@@ -2,6 +2,7 @@ import logging
 from flask import Blueprint, jsonify
 from db.db import check_sla, reativeTicket
 from datetime import datetime, timedelta 
+import requests
 import sys
 
 sla_bp = Blueprint('sla', __name__)
@@ -48,6 +49,15 @@ def verificar_sla():
                 log.info(f'Chamado {cdchamado} estourou o SLA de {SLA}h ')
 
                 row_dict['SLA'] = 'estourou'
+
+                #adicionar nota no chamado
+
+                data = {'cdchaamdo': cdchamado}
+                json_data = json.dumps(data)
+
+                resp = requests.post('http://localhost:8088/ws/WSTicket/addTicketHistory', json=json_data)
+
+                log.info(f'add nota no chamado {cdchamado} resp {resp.status_code}')
 
                 ##change suspensão para em atentimento
                 reativeTicket(cdchamado)
