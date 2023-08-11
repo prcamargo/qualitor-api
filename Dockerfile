@@ -23,7 +23,7 @@ ENV FLASK_RUN_PORT=8088
 RUN pip install -r requirements.txt
 
 # Exponha a porta em que a aplicação estará executando
-EXPOSE 5000
+EXPOSE 8088
 
 # Inicie o servidor Flask
 CMD ["python", "app.py"]

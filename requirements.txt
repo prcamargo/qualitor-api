@@ -3,3 +3,4 @@ pyqualitor
 python-dotenv
 xmltodict
 pymssql
+requests
