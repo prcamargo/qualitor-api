@@ -52,11 +52,12 @@ def verificar_sla():
                 row_dict['SLA'] = 'estourou'
 
                 #adicionar nota no chamado
+                data = {"cdchamado": cdchamado,
+                        "cdtipoacompanhamento": "4",
+                        "dsacompanhamento": "SLA estourou"
+                        }
 
-                data = {'cdchaamdo': cdchamado}
-                json_data = json.dumps(data)
-
-                resp = requests.post('http://localhost:8088/ws/WSTicket/addTicketHistory', json=json_data)
+                resp = requests.post('http://localhost:8088/ws/WSTicket/addTicketHistory', json=data)
 
                 log.info(f'add nota no chamado {cdchamado} resp {resp.status_code}')
 
