@@ -4,6 +4,7 @@ from db.db import check_sla, reativeTicket
 from datetime import datetime, timedelta 
 import requests
 import sys
+import json
 
 sla_bp = Blueprint('sla', __name__)
 
