@@ -38,7 +38,13 @@ def qualitor(ws,op):
             
             res = metodo(**json_data)
             
-            return jsonify(xmltodict.parse(res))
+            #convertendo xml para json
+            res_data = xmltodict.parse(res)
+
+            #log chamado
+            log.info(res_data)
+
+            return jsonify(res_data)
         else:
             return f'Metodo não encontrado'
         

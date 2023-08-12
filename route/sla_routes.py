@@ -52,7 +52,7 @@ def verificar_sla():
                 row_dict['SLA'] = 'estourou'
 
                 #adicionar nota no chamado
-                data = {"cdchamado": cdchamado,
+                data = {"cdchamado": cdchamado.toString(),
                         "cdtipoacompanhamento": "4",
                         "dsacompanhamento": "SLA estourou"
                         }
