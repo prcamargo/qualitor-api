@@ -51,11 +51,8 @@ def verificar_sla():
 
                 row_dict['SLA'] = 'estourou'
 
-                #convert cdchamado em string
-                cdchamado = cdchamado + ""
-
                 #adicionar nota no chamado
-                data = {"cdchamado": cdchamado,
+                data = {"cdchamado": str(cdchamado),
                         "cdtipoacompanhamento": "4",
                         "dsacompanhamento": "SLA estourou"
                         }
