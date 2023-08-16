@@ -50,13 +50,19 @@ var Ticket = {
         Zabbix.log(4, '[Qualitor Webhook] URL: ' + url + 'addTicketByData');
         Zabbix.log(4, '[Qualitor Webhook] params: ' + data);
 
-        Zabbix.log(0, '[Qualitor Webhook] abrindo chamado envento: ' + Ticket.dspalavrachave);
+        Zabbix.log(4, '[Qualitor Webhook] abrindo chamado envento: ' + Ticket.dspalavrachave);
         response = request.post(url + 'addTicketByData',data);
         Zabbix.log(4, '[Qualitor Webhook] HTTP code: ' + request.getStatus());
 
         try {
-            Zabbix.log(0,response);
             response = JSON.parse(response);
+
+            if (response.wsqualitor.response_status.status == 0 ){
+                Zabbix.log(4, '[Qualitor Webhook] abertura ERROR: ' + response.wsqualitor.response_status.msg)
+                return 'Error'
+            }
+            Zabbix.log(4, '[Qualitor Webhook] Chamado aberto: ' + response.wsqualitor.response_data.dataitem )
+            return 'OK'
             
         }
         catch (error) {
@@ -84,8 +90,15 @@ var Ticket = {
         Zabbix.log(4, '[Qualitor Webhook] HTTP code: ' + request.getStatus());
 
         try {
-            Zabbix.log(0,response);
+
             response = JSON.parse(response);
+
+            if (response.wsqualitor.response_status.status == 0 ){
+                Zabbix.log(4, '[Qualitor Webhook] closeTicket ERROR: ' + response.wsqualitor.response_status.msg)
+                return 'Error'
+            }
+            Zabbix.log(4, '[Qualitor Webhook] Chamado encerrado: ' + response.wsqualitor.response_data.dataitem )
+            return 'OK'
             
         }
         catch (error) {
@@ -116,6 +129,13 @@ var Ticket = {
         try {
             Zabbix.log(0,response);
             response = JSON.parse(response);
+
+            if (response.wsqualitor.response_status.status == 0 ){
+                Zabbix.log(4, '[Qualitor Webhook] addTicketHistory ERROR: ' + response.wsqualitor.response_status.msg)
+                return 'Error'
+            }
+            Zabbix.log(4, '[Qualitor Webhook] Chamado nota add: ' + response.wsqualitor.response_data.dataitem )
+            return 'OK'
             
         }
         catch (error) {
@@ -145,7 +165,15 @@ var Ticket = {
         try {
             Zabbix.log(0,response);
             response = JSON.parse(response);         
-            cdchamado = response.wsqualitor.response_data.dataitem.cdchamado;          
+            cdchamado = response.wsqualitor.response_data.dataitem.cdchamado;
+            
+            if (response.wsqualitor.response_status.status == 0 ){
+                Zabbix.log(4, '[Qualitor Webhook] getTicket ERROR: ' + response.wsqualitor.response_status.msg)
+                return 'Error'
+            }
+            Zabbix.log(4, '[Qualitor Webhook] procurando chamado: ' + response.wsqualitor.response_data.dataitem )
+            return 'OK'
+
         }
         catch (error) {
             response = null;
@@ -230,6 +258,8 @@ try {
     //abertura de chamado
     if (params.event_value == 1) {
 
+        Zabbix.log(4,params.tags.cdcategoria)
+
         //procurar IC 
         Ic.nmic = params.host_name;
         Ic.getIc();
@@ -239,7 +269,7 @@ try {
         Ticket.cdcliente = cdcliente;
         Ticket.cdcontato = cdcontato;
         Ticket.idchamado = '4';
-        Ticket.cdcategoria = params.tag;
+        Ticket.cdcategoria = params.tags.cdcategoria;
         Ticket.cdic = cdic
         Ticket.nmtitulochamado = params.trigger_name
         Ticket.cdtipochamado = '9';
@@ -249,9 +279,7 @@ try {
         Ticket.dspalavrachave = params.event_id
         Ticket.cdorigem = '21'
 
-        Ticket.addTicketByData();
-
-        return 'OK';
+        return Ticket.addTicketByData();
 
     }
     //encerrar chamado
@@ -264,9 +292,8 @@ try {
 
         //encerrandno chamado
         Ticket.cdchamado = cdchamado;
-        Ticket.closeTicket();
+        return Ticket.closeTicket();
 
-        return 'OK';
     }
     //add nota
     else {
@@ -279,7 +306,7 @@ try {
         //add nota
         Ticket.dsacompanhamento = params.message;
         Ticket.cdchamado = cdchamado;
-        Ticket.addTicketHistory();
+        return Ticket.addTicketHistory();
 
     }
 }
