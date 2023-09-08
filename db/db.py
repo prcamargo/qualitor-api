@@ -97,7 +97,7 @@ def reativeTicket(cdchamado):
 
     QUERY= f'''
         UPDATE hd_chamado
-        SET cdsituacao = 3
+        SET cdsituacao = 3,cdsubsituacao = 2074
         WHERE cdchamado = '{cdchamado}';
         '''
     try:
@@ -112,11 +112,23 @@ def reativeTicket(cdchamado):
         log.info(f'Erro {cdchamado} {e}')
         print("Erro:", e)
 
-    #finally:
-        # Fechando a conexão
-        #conn.close()
+def closeTicket(cdchamado):
 
+    # alterar cdsituação para 3 
+    QUERY= f'''
+        UPDATE hd_chamado
+        SET cdsituacao = 7,cdsubsituacao= 2077
+        WHERE cdchamado = '{cdchamado}';
+        '''
+    try:
+        #commit query
+        cursor.execute(QUERY)
+        conn.commit()
+        log.info(f'commit no db {cdchamado}')
+        return f'close ticket {cdchamado}'
 
-
-
-
+    except Exception as e:
+        # Caso haja algum erro, fazer rollback
+        conn.rollback()
+        log.info(f'Erro {cdchamado} {e}')
+        print("Erro:", e)

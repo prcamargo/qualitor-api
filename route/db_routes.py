@@ -1,12 +1,12 @@
 import logging
 from flask import Blueprint, jsonify
-from db.db import check_sla, reativeTicket
+from db.db import check_sla, reativeTicket, closeTicket
 from datetime import datetime, timedelta 
 import requests
 import sys
 import json
 
-sla_bp = Blueprint('sla', __name__)
+db_bp = Blueprint('db', __name__)
 
 # Configurar o logger
 log = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 log.addHandler(handler)
 
-@sla_bp.route('/sla/', methods=['GET'])
+@db_bp.route('/db/sla/', methods=['GET'])
 def verificar_sla():
     
     try:
@@ -79,3 +79,20 @@ def verificar_sla():
     except ValueError as e:
         log.error(f"Erro ao verificar SLA: {e}")
         return jsonify({"Erro": "Formato de data inválido."}), 400
+
+@db_bp.route('/db/close/<cdchamado>', methods=['GET'])
+def closeTicket(cdchamado):
+
+    #adicionar nota no chamado
+    data = {"cdchamado": str(cdchamado),
+            "cdtipoacompanhamento": "4",
+            "dsacompanhamento": "chamado encerrado"
+            }
+
+    resp = requests.post('http://localhost:8088/ws/WSTicket/addTicketHistory', json=data)
+
+    log.info(f'add nota no chamado {cdchamado} resp {resp.status_code}')
+
+    # fechar chamado query
+    closeTicket(cdchamado)
+    return jsonify({"Ticket close": cdchamado})

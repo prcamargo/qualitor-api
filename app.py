@@ -3,7 +3,7 @@
 import logging
 from flask import Flask
 import sys
-from route.sla_routes import sla_bp
+from route.db_routes import db_bp
 from route.qlt_routes import qlt_bp
 from dotenv import load_dotenv
 
@@ -22,7 +22,7 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 log.addHandler(handler)
 
-app.register_blueprint(sla_bp)
+app.register_blueprint(db_bp)
 app.register_blueprint(qlt_bp)
 
 if __name__ == '__main__':
