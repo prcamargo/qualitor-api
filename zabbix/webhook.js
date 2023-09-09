@@ -151,7 +151,7 @@ else if ( params.event_value == 0){
 
         } while ( resp.wsqualitor.response_status.msg != 'Ws - This ticket have no next step.' );
         return JSON.stringify(resp);*/
-        url = params.event_uri + '/db/close/' + cdchamado;
+        url = params.event_uri + 'db/close/' + cdchamado;
         req = new HttpRequest();
         //req.addHeader('Content-Type: application/json');
         resp = req.get(url);
