@@ -84,14 +84,14 @@ def verificar_sla():
 def closeTicket(cdchamado):
 
     #adicionar nota no chamado
-    data = {"cdchamado": str(cdchamado),
-            "cdtipoacompanhamento": "4",
-            "dsacompanhamento": "chamado encerrado"
-            }
+    #data = {"cdchamado": str(cdchamado),
+    #        "cdtipoacompanhamento": "4",
+    #        "dsacompanhamento": "chamado encerrado"
+    #        }
 
-    resp = requests.post('http://localhost:8088/ws/WSTicket/addTicketHistory', json=data)
+    #resp = requests.post('http://localhost:8088/ws/WSTicket/addTicketHistory', json=data)
 
-    log.info(f'add nota no chamado {cdchamado} resp {resp.status_code}')
+    #log.info(f'add nota no chamado {cdchamado} resp {resp.status_code}')
 
     # fechar chamado query
     closeTicket(cdchamado)
