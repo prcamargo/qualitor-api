@@ -1,6 +1,7 @@
 import logging
 from flask import Blueprint, jsonify
-from db.db import check_sla, reativeTicket, closeTicket
+from db.db import check_sla, reativeTicket
+from db.db import closeTicket as db_closeTicket
 from datetime import datetime, timedelta 
 import requests
 import sys
@@ -94,5 +95,5 @@ def closeTicket(cdchamado):
     #log.info(f'add nota no chamado {cdchamado} resp {resp.status_code}')
 
     # fechar chamado query
-    closeTicket(cdchamado)
+    db_closeTicket(cdchamado)
     return jsonify({"Ticket close": cdchamado})
