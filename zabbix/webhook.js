@@ -112,7 +112,7 @@ else if ( params.event_value == 0){
 
    //avancando etapa
    if (params.cdcategoria == 14773) {
-        /*do {
+        do {
             //procurar etapa
             url = params.event_uri + 'WSTicket/getTicketNextSteps';
             resp = sendMessage(url,fields);
@@ -150,8 +150,10 @@ else if ( params.event_value == 0){
             resp = JSON.parse(resp);
 
         } while ( resp.wsqualitor.response_status.msg != 'Ws - This ticket have no next step.' );
-        return JSON.stringify(resp);*/
-        url = params.event_uri + 'db/close/' + cdchamado;
+        return JSON.stringify(resp);
+
+        /*
+        url =  'http://localhost:8088/db/close/' + cdchamado;
         req = new HttpRequest();
         //req.addHeader('Content-Type: application/json');
         resp = req.get(url);
@@ -160,9 +162,10 @@ else if ( params.event_value == 0){
             throw 'Response: ' + req.getStatus();
         }
         return JSON.stringify(resp);
-
-    } else {
+        */
+    } else { 
         //encerrando chamado
+
         url = params.event_uri + 'WSTicket/closeTicket';
         fields.idfecharrelacionados = 'Y';
         resp = sendMessage(url,fields);
@@ -170,7 +173,6 @@ else if ( params.event_value == 0){
 
         return JSON.stringify(resp);
     }
-   
 }
 //add nota
 else {
@@ -182,7 +184,7 @@ else {
 
     //convert string
     cdchamado = "" + params.qlt_ticket;
-
+/*
     //iniciar chamado
     fields = {};
     fields.cdchamado = cdchamado;
@@ -196,7 +198,7 @@ else {
         url = params.event_uri + 'WSTicket/startTicket';
         sendMessage(url,fields);
     }
-
+*/
     //add nota
     url = params.event_uri + 'WSTicket/addTicketHistory';
     fields = {};
