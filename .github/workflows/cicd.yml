@@ -17,6 +17,4 @@ jobs:
           port: ${{ secrets.HOST_PORT }}
           username: ${{ secrets.HOST_USERNAME }}
           password: ${{ secrets.HOST_PWD }}          
-          script: |
-             sudo su
-             mkdir /tmp/teste
+          script: whoami
