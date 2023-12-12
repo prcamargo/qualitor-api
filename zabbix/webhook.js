@@ -110,7 +110,7 @@ else if ( params.event_value == 0){
         sendMessage(url,fields);
     }
 
-   //avancando etapa
+   //avancando etapa para chamado de link down
    if (params.cdcategoria == 14773) {
         do {
             //procurar etapa
@@ -128,10 +128,12 @@ else if ( params.event_value == 0){
             targetEntry = null;
 
             for (var i = 0; i < dataItems.length; i++) {
-                if (dataItems[i].nmetapa === targetNmetapa) {
+                /*if (dataItems[i].nmetapa === targetNmetapa1) {*/
+                var nmetapa = dataItems[i].nmetapa;
+                if (nmetapa.match(/Encerrado/)) {
                     targetEntry = dataItems[i];
                     break;
-                }
+                } 
             }
 
             //avancando etapa
@@ -145,7 +147,7 @@ else if ( params.event_value == 0){
             fields.cdetapa = "" + cdetapa;
             Zabbix.log(4, 'etapa ' + cdetapa)
             fields.nmidentificador = "zbx";
-            resp = sendMessage(url,fields);
+            resp = sendMessage(url,fields); //avançando etapa
             Zabbix.log(4, '[Qualitor Webhook] ' + resp);
             resp = JSON.parse(resp);
 
