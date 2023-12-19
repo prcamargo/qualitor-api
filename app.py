@@ -3,8 +3,8 @@
 import logging
 from flask import Flask
 import sys
-from route.db_routes import db_bp
-from route.qlt_routes import qlt_bp
+from route.db import db_bp
+from route.qlt import qlt_bp
 from dotenv import load_dotenv
 
 #load env
