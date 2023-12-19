@@ -1,20 +1,17 @@
-name: Deployment Workflow
+name: CD
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
+  release:
+    types: [published]
 jobs:
   deploy:
-    name: Build
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: deploy no srv
-        uses: appleboy/ssh-action@v1.0.0
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          port: ${{ secrets.PORT }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}          
-          script: whoami
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: docker ps -a
