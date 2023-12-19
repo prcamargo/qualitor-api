@@ -7,10 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to server
-        uses: appleboy/ssh-action@master
+        uses: webfactory/ssh-agent@v0.8.0
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: docker ps -a
+          #host: ${{ secrets.SSH_HOST }}
+          #username: ${{ secrets.SSH_USER }}
+          #key: ${{ secrets.SSH_KEY }}
+          #port: ${{ secrets.SSH_PORT }}
+          #script: docker ps -a
+          ssh-private-key: ${{ secrets.SSH_KEY }}
