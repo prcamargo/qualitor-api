@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Continuous Deployment
     steps:
+      - name: Checkout code 
+        uses: actions/checkout@v2
+
       - name: Deploy using ssh
         uses: appleboy/ssh-action@v0.1.9
         with:
