@@ -1,17 +1,17 @@
 name: CD
 on: [push]
 
-jobs:
-  build:
-    name: Deploy
+jobs: 
+  deploy:
     runs-on: ubuntu-latest
+    name: Continuous Deployment
     steps:
-      - name: Deploy to server
-        uses: webfactory/ssh-agent@v0.8.0
+      - name: Deploy using ssh
+        uses: appleboy/ssh-action@master
         with:
-          #host: ${{ secrets.SSH_HOST }}
-          #username: ${{ secrets.SSH_USER }}
-          #key: ${{ secrets.SSH_KEY }}
-          #port: ${{ secrets.SSH_PORT }}
-          #script: docker ps -a
-          ssh-private-key: ${{ secrets.SSH_KEY }}
+          host: 170.231.15.86
+          username: ubuntu
+          password: 7X83YDf@e
+          port: 3522
+          script: |
+            ls
