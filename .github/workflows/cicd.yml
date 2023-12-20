@@ -12,6 +12,6 @@ jobs:
           host: 170.231.15.86
           username: ubuntu
           password: 7X83YDf@e
-          port: 3522
+          port: 35222
           script: |
             ls
