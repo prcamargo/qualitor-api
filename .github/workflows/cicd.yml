@@ -7,11 +7,11 @@ jobs:
     name: Continuous Deployment
     steps:
       - name: Deploy using ssh
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.0
         with:
-          host: 170.231.15.86
-          username: ubuntu
-          password: 11
-          port: 35222
+          host: ${{ secrets.SSH.HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
           script: |
             ls
