@@ -7,7 +7,7 @@ jobs:
     name: Continuous Deployment
     steps:
       - name: Deploy using ssh
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
