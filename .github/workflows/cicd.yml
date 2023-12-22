@@ -6,13 +6,9 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        proxy_port: 22
-        script: whoami
-        debug: true
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: test
+      run: |
+        ssh-keyscan -p 35222 -H 170.231.15.86
