@@ -38,3 +38,4 @@ jobs:
             -e TZ=America/Sao_Paulo \
             -v /etc/hosts:/etc/hosts \
             qualitor-api
+            sudo rm -rf qualitor-api/
