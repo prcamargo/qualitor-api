@@ -23,7 +23,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
             sudo git clone https://github.com/prcamargo/qualitor-api.git
-            sudo cd qualitor-api
+            cd qualitor-api
             sudo docker build -t qualitor-api .
             sudo docker rm -f $(sudo docker ps -qa)
             sudo docker run -it -d -p 8088:8088 --name qualitor-api \
