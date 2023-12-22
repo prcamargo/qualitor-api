@@ -9,6 +9,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: test
+    - name: add known hosts
+      run: ssh-keyscan -p 35222 -H 170.231.15.86 >> ~/.ssh/known_hosts
+      
+    - name: connect ssh 
       run: |
         ssh ubuntu@170.231.15.86 -p 35222 
