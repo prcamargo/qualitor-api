@@ -13,7 +13,7 @@ jobs:
       run: mkdir -p /home/runner/.ssh
 
     - name: add known hosts
-      run: ssh-keyscan -p 35222 -H 170.231.15.86 >> ~/.ssh/known_hosts
+      run: sudo ssh-keyscan -p 35222 -H 170.231.15.86 >> ~/.ssh/known_hosts
 
     - name: connect ssh 
       run: |
