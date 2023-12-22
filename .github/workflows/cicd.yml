@@ -12,7 +12,7 @@ jobs:
         host: 170.231.15.86
         username: ubuntu
         password: 7X83YDf@e
-        port: 22
-        proxy_port: 35222
+        port: 35222
+        proxy_port: 22
         script: whoami
         debug: true
