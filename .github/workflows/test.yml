@@ -1,0 +1,40 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  Deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: deploy remote server
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: |
+            sudo git clone https://github.com/prcamargo/qualitor-api.git
+            sudo cd qualitor-api
+            sudo docker build -t qualitor-api .
+            sudo docker rm -f $(sudo docker ps -qa)
+            sudo docker run -it -d -p 8088:8088 --name qualitor-api \
+            -e FLASK_RUN_HOST=8088 \
+            -e QUALITOR_DB_HOST='10.40.76.3' \
+            -e QUALITOR_DB_USR='sa' \
+            -e QUALITOR_DB_PWD='54exXKmbohXPaoBdauCqEkEA4MjAUZO9' \
+            -e QUALITOR_DB_BASE='QUALITOR_PROD' \
+            -e QUALITOR_URI='https://qltapi.vantix.com.br/qualitor/ws/services/service.php?wsdl=' \
+            -e QUALITOR_WS_USR='ws.vantix' \
+            -e QUALITOR_WS_PWD='qlt@1!@#' \
+            -e TZ=America/Sao_Paulo \
+            -v /etc/hosts:/etc/hosts \
+            qualitor-api
