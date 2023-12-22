@@ -1,26 +1,16 @@
-name: CD
-on:
-  push:
-    branches:
-      - main
+name: remote ssh command
+on: [push]
+jobs:
 
-jobs: 
-  deploy:
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    name: CD
     steps:
-      - name: Checkout code 
-        uses: actions/checkout@v2
-
-      - name: Deploy to Staging server
-        uses: easingthemes/ssh-deploy@main
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
-          ARGS: "-rlgoDzvc -i"
-          SOURCE: "dist/"
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_USER: ${{ secrets.SSH_USER }}
-          REMOTE_PORT: ${{ secrets.SSH_PORT }}
-          SCRIPT_BEFORE: |
-            whoami
-            ls -al
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: whoami
