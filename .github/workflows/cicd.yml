@@ -14,3 +14,4 @@ jobs:
         password: 7X83YDf@e
         port: 35222
         script: whoami
+        debug: true
