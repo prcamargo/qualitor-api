@@ -12,10 +12,9 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            paulor1610/qualitor-api
-            ghcr.io/paulor1610/qualitor-api            
-          # generate Docker tags based on the following events/attributes
-          tags: |
+            prcamargo/qualitor-api
+            ghcr.io/prcamargo/qualitor-api
+          tags: | 
             type=schedule
             type=ref,event=branch
             type=ref,event=pr
