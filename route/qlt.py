@@ -28,6 +28,7 @@ def qualitor(ws,op,cdempresa):
     json_data = request.get_json()
 
     #conectando ao qualitor
+    log.info(f'cdempresa= {cdempresa}')
     qws = QualitorWS(qualitor_ws_uri+ws)
     qws.login(qualitor_ws_usr, qualitor_ws_pwd, str(cdempresa))
 
