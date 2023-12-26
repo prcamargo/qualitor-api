@@ -82,7 +82,9 @@ def check_sla():
         try:
             row_dict["SLA"] = int(row[3])
         except (IndexError, ValueError):
-            pass
+            print("not number")
+        else:
+            row_dict["SLA"] = 0
         
         try:
             row_dict["data_sup"] = row[4].strftime('%Y-%m-%d %H:%M:%S')
