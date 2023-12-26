@@ -40,20 +40,28 @@ function ticketStep(cdchamado) {
 
 }
 
+//check empresa
+cdempresa = result.tags.cdempresa;
+if (cdempresa){
+    Zabbix.log(4, "[Qualitor webhook] tem empresa");
+} else {
+    cdempresa = 2;
+}
+
 //abrir ticket
 if (params.event_value == 1 && params.event_updata_status == 0) {
     Zabbix.log(4, '[Qualitor Webhook] Open Ticket - find ic');
     //procurando IC method getic
     fields = {};
     fields.nmic = params.host_name;
-    url = params.event_uri + 'WSIc/getIc';
+    url = params.event_uri + cdempresa + '/WSIc/getIc';
     resp = sendMessage(url,fields);
 
     //procurando cdic method getdataic
     resp = JSON.parse(resp);
     fields = {};
     fields.cdic = resp.wsqualitor.response_data.dataitem.cdic;
-    url = params.event_uri + 'WSIc/getIcData';
+    url = params.event_uri + cdempresa + '/WSIc/getIcData';
     resp = sendMessage(url,fields);
 
     //criando json para abertura de chamado
@@ -74,7 +82,7 @@ if (params.event_value == 1 && params.event_updata_status == 0) {
 
     Zabbix.log(3, JSON.stringify(fields))
 
-    url = params.event_uri + 'WSTicket/addTicketByData';
+    url = params.event_uri + cdempresa + '/WSTicket/addTicketByData';
     resp = sendMessage(url, fields);
 
     Zabbix.log(3, '[Qualitor Webhook] Open ticket ' + resp);
@@ -101,12 +109,12 @@ else if ( params.event_value == 0){
     fields.cdchamado = cdchamado;
 
     Zabbix.log(3, '[Qualitor Webhook] verificar se chamado ja foi iniciado');
-    url = params.event_uri + 'WSTicket/getTicketData';
+    url = params.event_uri + cdempresa + '/WSTicket/getTicketData';
     resp = sendMessage(url,fields);
     resp = JSON.parse(resp);
     if (resp.wsqualitor.response_data.dataitem.nmsituacao == 'Aguardando atendimento') {
         Zabbix.log(3, '[Qualitor Webhook] iniciando chamado ' + cdchamado);
-        url = params.event_uri + 'WSTicket/startTicket';
+        url = params.event_uri + cdempresa + '/WSTicket/startTicket';
         sendMessage(url,fields);
     }
 
@@ -114,7 +122,7 @@ else if ( params.event_value == 0){
    if (params.cdcategoria == 14773) {
         do {
             //procurar etapa
-            url = params.event_uri + 'WSTicket/getTicketNextSteps';
+            url = params.event_uri + cdempresa + '/WSTicket/getTicketNextSteps';
             resp = sendMessage(url,fields);
             Zabbix.log(4,'[Qualitor Webhook] ' + resp);
             resp = JSON.parse(resp);
@@ -137,7 +145,7 @@ else if ( params.event_value == 0){
             }
 
             //avancando etapa
-            url = params.event_uri + 'WSTicket/setTicketStep';
+            url = params.event_uri + cdempresa + '/WSTicket/setTicketStep';
             if (targetEntry) {
                 cdetapa = targetEntry.cdetapa;
             } else {
@@ -168,7 +176,7 @@ else if ( params.event_value == 0){
     } else { 
         //encerrando chamado
 
-        url = params.event_uri + 'WSTicket/closeTicket';
+        url = params.event_uri + cdempresa + '/WSTicket/closeTicket';
         fields.idfecharrelacionados = 'Y';
         resp = sendMessage(url,fields);
         Zabbix.log(3, '[Qualitor Webhook] Close ticket ' + resp);
@@ -202,7 +210,7 @@ else {
     }
 */
     //add nota
-    url = params.event_uri + 'WSTicket/addTicketHistory';
+    url = params.event_uri + cdempresa + '/WSTicket/addTicketHistory';
     fields = {};
     fields.cdchamado = cdchamado;
     fields.dsacompanhamento = params.message;
