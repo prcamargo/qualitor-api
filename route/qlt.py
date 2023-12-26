@@ -23,7 +23,7 @@ log.addHandler(handler)
 
 @qlt_bp.route('/ws/<int:cdempresa>/<ws>/<op>/', defaults={'cdempresa': 1}, methods=['POST'])
 @qlt_bp.route('/ws/<ws>/<op>/', methods=['POST'])
-def qualitor(ws,op,cdempresa=1):
+def qualitor(ws,op,cdempresa):
 
     json_data = request.get_json()
 
