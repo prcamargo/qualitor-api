@@ -21,7 +21,8 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 log.addHandler(handler)
 
-@qlt_bp.route('/ws/<int:cdempresa>/<ws>/<op>/', defaults={'cdempresa': 1}, methods=['POST'])
+#@qlt_bp.route('/ws/<int:cdempresa>/<ws>/<op>/', defaults={'cdempresa': 1}, methods=['POST'])
+@qlt_bp.route('/ws/<int:cdempresa>/<ws>/<op>/', methods=['POST'])
 @qlt_bp.route('/ws/<ws>/<op>/', methods=['POST'])
 def qualitor(ws,op,cdempresa):
 
