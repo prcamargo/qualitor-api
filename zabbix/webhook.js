@@ -23,27 +23,11 @@ function sendMessage(url,fields) {
     }
 }
 
-function findTicket(url,dspalavrachave,nmtitulochamado) {
-
-    fields = {};
-    fields.dspalavrachave = dspalavrachave;
-    fields.nmtitulochamado = nmtitulochamado;
-
-    resp = sendMessage(url,fields);
-    resp = JSON.parse(resp);
-    Zabbix.log(4, JSON.stringify(resp));
-    return resp.wsqualitor.response_data.dataitem.cdchamado;
-    
-}
-
-function ticketStep(cdchamado) {
-
-}
-
 //check empresa
-cdempresa = result.tags.cdempresa;
-if (cdempresa){
-    Zabbix.log(4, "[Qualitor webhook] tem empresa");
+zbx_proxy = result.tags.zbx_proxy;
+if (['com-'].indexOf(zbx_proxy) !== -1 ){
+    Zabbix.log(3, '[Qualitor Webhook] empresa 1')
+    cdempresa = 1;
 } else {
     cdempresa = 2;
 }
@@ -64,8 +48,14 @@ if (params.event_value == 1 && params.event_updata_status == 0) {
     url = params.event_uri + cdempresa + '/WSIc/getIcData';
     resp = sendMessage(url,fields);
 
-    //criando json para abertura de chamado
     resp = JSON.parse(resp);
+
+    //add tag dsobservacoes
+    if (resp.wsqualitor.response_data.dataitem.dsobservacoes){
+        result.tags.zbx_qlt_dsobservacoes = resp.wsqualitor.response_data.dataitem.dsobservacoes;
+    }
+
+    //criando json para abertura de chamado
     fields = {};
     fields.cdcliente = resp.wsqualitor.response_data.dataitem.cdcliente;
     fields.cdcontato = resp.wsqualitor.response_data.dataitem.cdcontato;
@@ -162,17 +152,6 @@ else if ( params.event_value == 0){
         } while ( resp.wsqualitor.response_status.msg != 'Ws - This ticket have no next step.' );
         return JSON.stringify(resp);
 
-        /*
-        url =  'http://localhost:8088/db/close/' + cdchamado;
-        req = new HttpRequest();
-        //req.addHeader('Content-Type: application/json');
-        resp = req.get(url);
-        if (req.getStatus() != 200) {
-            Zabbix.log(4, '[Qualitor Webhook]Error ' + resp);
-            throw 'Response: ' + req.getStatus();
-        }
-        return JSON.stringify(resp);
-        */
     } else { 
         //encerrando chamado
 
@@ -194,21 +173,7 @@ else {
 
     //convert string
     cdchamado = "" + params.qlt_ticket;
-/*
-    //iniciar chamado
-    fields = {};
-    fields.cdchamado = cdchamado;
 
-    Zabbix.log(3, '[Qualitor Webhook] verificar se chamado ja foi iniciado');
-    url = params.event_uri + 'WSTicket/getTicketData';
-    resp = sendMessage(url,fields);
-    resp = JSON.parse(resp);
-    if (resp.wsqualitor.response_data.dataitem.nmsituacao == 'Aguardando atendimento') {
-        Zabbix.log(3, '[Qualitor Webhook] iniciando chamado ' + cdchamado);
-        url = params.event_uri + 'WSTicket/startTicket';
-        sendMessage(url,fields);
-    }
-*/
     //add nota
     url = params.event_uri + cdempresa + '/WSTicket/addTicketHistory';
     fields = {};

@@ -79,6 +79,7 @@ def check_sla():
         except IndexError:
             pass
         
+        
         try:
             row_dict["SLA"] = int(row[3])
         except ValueError:
